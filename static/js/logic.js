@@ -52,6 +52,8 @@ d3.json(all_breweries).then(function(data) {
     console.log(data)
 });
 
+
+
 // d3.json("/get-json").then(function(brands) {
 //     var matrix = [],
 //         nodes = brands.nodes;

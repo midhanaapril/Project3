@@ -34,14 +34,14 @@ def home():
 
 
 # Route that will trigger the DB loading function
-@app.route("/data")
-def initData():
+# @app.route("/dataload")
+# def initData():
 
-    # load scraped data into pyMongo
-    data_initialization.loadData()  
+#     # load scraped data into pyMongo
+#     data_initialization.loadData()  
 
-    # Redirect back to home page
-    return redirect("/")
+#     # Redirect back to home page
+#     return redirect("/")
 
 # API call to get all data 
 @app.route("/beer_api", methods=['GET', 'POST'])
@@ -49,7 +49,7 @@ def beer_api():
     data = dumps(list(brewery.find()))
     return data
 
-@app.route("/beer_api/<indv_brewery>")
+@app.route("/beer_api/<indv_brewery>", methods=['GET', 'POST'])
 def one_brewery(indv_brewery):
     """Fetch the brewery information that matches the name 
        the path variable supplied by the user, or a 404 if not."""
@@ -63,6 +63,7 @@ def one_brewery(indv_brewery):
     except: 
         print("no I ran")
         return jsonify({"error": f"{indv_brewery} not found."}), 404
+
 
 # @app.route('/get-json', methods=['GET', 'POST'])
 # def get_json():
