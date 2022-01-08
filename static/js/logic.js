@@ -43,3 +43,44 @@ var myMap = L.map("map", {
 }); 
 
 defaultMap.addTo(myMap); 
+
+
+const all_breweries  = 'http://127.0.0.1:5500/beer_api'
+
+d3.json(all_breweries).then(function(data) {
+    //console.log(data);
+    console.log(data)
+});
+
+// d3.json("/get-json").then(function(brands) {
+//     var matrix = [],
+//         nodes = brands.nodes;
+//         //n = nodes.length;
+//     console.log(nodes)
+// });
+
+// function demoInfo(sample)
+// {
+//     //console.log(sample);
+    
+//     // d3.json("url.").then((data)=>{
+//     //     let metaData = data.metadata;
+        
+//     //     //filtering
+//     //     let result = metaData.filter(sampleResult => sampleResult.id == sample); 
+
+//     //     //grab index 0 
+//     //     let resultD = result[0];
+//     //     console.log("I ran")
+//     //     console.log(resultD)
+//     //     console.log(metaData)
+//     //     //clearing data for "fresh display"
+//     //     /d3.select("#sample-metadata").html("");
+
+//     //     Object.entries(resultD).forEach(([key,value])=> {
+//     //         d3.select("#sample-metadata")
+//     //             .append("h5").text(`${key}: ${value}`); 
+//     //     });
+//     // });
+    
+// }

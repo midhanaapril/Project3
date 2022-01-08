@@ -11,9 +11,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />
+    <!-- our CSS-->
     <link rel="stylesheet" href = "../static/css/style.css">  
+    <!--fullpage CSS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.css" integrity="sha512-4rPgyv5iG0PZw8E+oRdfN/Gq+yilzt9rQ8Yci2jJ15rAyBmF0HBE4wFjBkoB72cxBeg63uobaj1UcNt/scV93w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <!--bootstrap CSS-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <!-- Our CSS -->
   <!-- <link rel="stylesheet" type="text/css" href="static/css/style.css"> -->
   
@@ -40,12 +43,33 @@
             <div class = "slide" id="map"></div>
         </div>
 
+        <div class="section s1">
+            <h1>The fourth Section</h1>
+            <div class="row">
+                <div class="col-md-2">
+                  <div class="well">
+                    <h5>Test Subject ID No.:</h5>
+                    <select id="selDataset" onchange="optionChanged(this.value)"></select>
+                  </div>
+                  <div class="panel panel-primary">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Demographic Info</h3>
+                    </div>
+                    <div id="sample-metadata" class="panel-body"></div>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div id="bar"></div>
+                </div>
+                <div class="col-md-5">
+                  <div id="gauge"></div>
+                </div>
+            </div>
+        </div>
+
         
 
     </div>
-
-    <!-- The div that holds our map -->
-    <!-- <div id="map"></div> -->
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
@@ -55,16 +79,16 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <!-- Our JavaScript -->
     <script type="text/javascript" src="../static/js/logic.js"></script>
-
+    <!-- Full Page JS Script-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.js" 
         integrity="sha512-gSf3NCgs6wWEdztl1e6vUqtRP884ONnCNzCpomdoQ0xXsk06lrxJsR7jX5yM/qAGkPGsps+4bLV5IEjhOZX+gg==" 
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Full Page JS Script-->
     <script>
         new fullpage('#fullPage', {
             autoScrolling: true,
             navigation: true
         })
-
     </script>
 </body>
 
