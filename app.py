@@ -47,27 +47,7 @@ def initData():
 @app.route("/beer_api", methods=['GET', 'POST'])
 def beer_api():
     data = dumps(list(brewery.find()))
-    #print(data)
-    # a = [
-    #     {
-    #         "n": 2,
-    #         "e": 1
-    #     },
-    #     {
-    #         "from": 1,
-    #         "to": 2
-    #     },
-    #     {
-    #         "from": 2,
-    #         "to": 3
-    #     },
-    #     {
-    #         "from": 3,
-    #         "to": 4
-    #     }
-    # ]
-
-    return jsonify(data)
+    return data
 
 @app.route("/beer_api/<indv_brewery>")
 def one_brewery(indv_brewery):
@@ -84,12 +64,12 @@ def one_brewery(indv_brewery):
         print("no I ran")
         return jsonify({"error": f"{indv_brewery} not found."}), 404
 
-@app.route('/get-json', methods=['GET', 'POST'])
-def get_json():
-    ''' Send JSON data to Javascript '''
-    # Import Data
-    data = dumps(list(brewery.find()))
-    return jsonify(data)
+# @app.route('/get-json', methods=['GET', 'POST'])
+# def get_json():
+#     ''' Send JSON data to Javascript '''
+#     # Import Data
+#     data = dumps(list(brewery.find()))
+#     return jsonify(data)
 
 
 if __name__ == "__main__":
