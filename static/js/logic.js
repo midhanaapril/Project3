@@ -86,3 +86,74 @@ d3.json(all_breweries).then(function(data) {
 //     // });
     
 // }
+
+function breweryInfo(sample)
+{
+    //console.log(sample);
+    d3.json('http://127.0.0.1:5500/beer_api/'+sample).then((data)=>{
+        let breweryEntry = data;
+        console.log(breweryEntry)
+        console.log(breweryEntry[0])
+        
+        //filtering
+        //let result = metaData.filter(breweryResult => brewery.company_name == brewery); 
+        
+        //grab index 0 
+        //let resultD = breweryEntry[0];
+        //console.log(resultD)
+
+        //clearing data for "fresh display"
+        d3.select("#sample-metadata").html("");
+
+        Object.entries(breweryEntry[0]).forEach(([key,value])=> {
+            d3.select("#sample-metadata")
+                .append("h5").text(`${key}: ${value}`); 
+        });
+    });
+}
+
+
+
+//function that initialize in the dashboard 
+function initialize()
+{
+
+    //access the dropdown selector from the index.html files
+    var select = d3.select("#selDataset"); 
+    
+    d3.json('http://127.0.0.1:5500/beer_api/brewery_names').then((data)=>{
+        let brewery_names = data; 
+        //console.log(data); 
+        //console.log(data[0]);
+
+        //for each to create objects for each samples 
+        brewery_names.forEach((brewery) => {
+             select.append("option") 
+                 .text(brewery)
+                 .property("value", brewery); 
+        });
+        let first_brewery = brewery_names[0];
+        //console.log(first_brewery)
+
+        // for metadata 
+        breweryInfo(first_brewery); 
+        //buildBarChart(first_sample); 
+        //buildBubChart(first_sample); 
+
+    });
+};
+
+//function that updates the dashboard 
+function optionChanged(item)
+{
+    //call demoInfo function to change the item 
+    breweryInfo(item);  
+    //call bar chart 
+    //buildBarChart(item); 
+    //call bubble chart 
+    //buildBubChart(item); 
+
+}
+
+//call the initialize function 
+initialize(); 

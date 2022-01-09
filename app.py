@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, jsonify, Response
 from flask_pymongo import PyMongo
 import pymongo as mongo
-import data_initialization
+#import data_initialization
 from bson.json_util import dumps
 
 # Create an instance of Flask
@@ -64,6 +64,10 @@ def one_brewery(indv_brewery):
         print("no I ran")
         return jsonify({"error": f"{indv_brewery} not found."}), 404
 
+@app.route("/beer_api/brewery_names", methods=['GET','POST'])
+def brewery_list(): 
+    data = brewery.distinct('company_name')
+    return jsonify(data)
 
 # @app.route('/get-json', methods=['GET', 'POST'])
 # def get_json():
