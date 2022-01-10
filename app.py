@@ -56,13 +56,16 @@ def one_brewery(indv_brewery):
 
     #query the mongoDB for indv_brewery and return info 
     try: 
-        print("I ran")
-        print(indv_brewery)
         data = db.brewery.find({'company_name' : indv_brewery})
         return dumps(list(data))
     except: 
         print("no I ran")
         return jsonify({"error": f"{indv_brewery} not found."}), 404
+
+@app.route("/beer_api/<membership>", methods=['GET','POST'])
+def membership_status(membership): 
+    data = db.brewery.find({'member_type':membership})
+    return dumps(list(data))
 
 @app.route("/beer_api/brewery_names", methods=['GET','POST'])
 def brewery_list(): 

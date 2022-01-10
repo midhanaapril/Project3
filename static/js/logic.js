@@ -53,40 +53,6 @@ d3.json(all_breweries).then(function(data) {
 });
 
 
-
-// d3.json("/get-json").then(function(brands) {
-//     var matrix = [],
-//         nodes = brands.nodes;
-//         //n = nodes.length;
-//     console.log(nodes)
-// });
-
-// function demoInfo(sample)
-// {
-//     //console.log(sample);
-    
-//     // d3.json("url.").then((data)=>{
-//     //     let metaData = data.metadata;
-        
-//     //     //filtering
-//     //     let result = metaData.filter(sampleResult => sampleResult.id == sample); 
-
-//     //     //grab index 0 
-//     //     let resultD = result[0];
-//     //     console.log("I ran")
-//     //     console.log(resultD)
-//     //     console.log(metaData)
-//     //     //clearing data for "fresh display"
-//     //     /d3.select("#sample-metadata").html("");
-
-//     //     Object.entries(resultD).forEach(([key,value])=> {
-//     //         d3.select("#sample-metadata")
-//     //             .append("h5").text(`${key}: ${value}`); 
-//     //     });
-//     // });
-    
-// }
-
 function breweryInfo(sample)
 {
     //console.log(sample);
@@ -95,24 +61,124 @@ function breweryInfo(sample)
         console.log(breweryEntry)
         console.log(breweryEntry[0])
         
-        //filtering
-        //let result = metaData.filter(breweryResult => brewery.company_name == brewery); 
-        
-        //grab index 0 
-        //let resultD = breweryEntry[0];
-        //console.log(resultD)
-
         //clearing data for "fresh display"
         d3.select("#sample-metadata").html("");
 
-        Object.entries(breweryEntry[0]).forEach(([key,value])=> {
+        Object.entries(breweryEntry[0]).slice(1).forEach(([key,value])=> {
+            if(key == "company_name") {
+                key = "Company Name: ";
+            } else if (key == "street_address"){
+                key ="Street Address: ";
+            }else if ( key == "city"){
+                key = "City: ";
+            }else if ( key == "company_phone"){
+                key = "Company Phone Number: ";
+            }else if ( key == "state"){
+                key = "State: ";
+            }else if ( key == "zipcode"){
+                key = "Zipcode: ";
+            }else if ( key == "company_type"){
+                key = "Brewery Type: ";
+            } else if ( key == "member_type"){
+                key = "Membership Status: ";
+            } else if ( key == "independent_craft"){
+                key = "Independent Craft Brewery: "; 
+            }else if ( key == "latitude: "){
+                key = "Latitude: ";
+            }else if ( key == "longitude"){
+                key = "Longitude: "
+            }else if ( key == "address"){
+                key = ""; 
+                value = "";
+            };
+
             d3.select("#sample-metadata")
-                .append("h5").text(`${key}: ${value}`); 
+                .append("h5").style("font-weight",700).text(`${key}`)
+                .append("tspan").style("font-weight", 300).text(`${value}`); 
         });
     });
 }
 
+function radioFilter(selection){
+    let membership = selection;
+    if (selection == "option2") {
+        //option 2 = Associate Members Only
+        membership = "/Beer Association Associate Member "
+    } else if(selection == "option3"){
+        //option 3 = Beer Association member 
+        membership = "/Beer Association Member"
+    }else if (selection == "option4"){
+        membership = "/No Membership"
+    };
+ 	d3.json('http://127.0.0.1:5500/beer_api'+membership).then(function(data) {
+ 		console.log(selection);
+        if (selection == "option2") {
+            //option 2 = Associate Members Only
+        };
+ 	}); 
+}; 
 
+
+ function buildPieChart(){
+     d3.json("http://127.0.0.1:5500/beer_api").then((data)=>{
+        //filtering by ID 
+        let not_member = data.filter(membershipS =>membershipS.member_type == "No Membership").length; 
+        let BAmember = data.filter(membershipS =>membershipS.member_type == "Beer Association Member").length; 
+        let BAAmember = data.filter(membershipS =>membershipS.member_type == "Beer Association Associate Member").length; 
+
+        total_count = not_member + BAmember + BAAmember; 
+        let array = [not_member, BAmember , BAAmember];
+        let array2 = [];
+        for(var i = 0, length = array.length; i < length; i++){
+            array2[i] = (array[i]/total_count)*100;
+        }
+
+        var data = [{
+            values: array2,
+            labels: ['No Membership', 'Beear Association Member', 'Beear Association "Associate" Member'],
+            type: 'pie'
+          }];
+          
+        var layout = {
+            title: "Membership Summary",
+            height: 400,
+            width: 500
+        };
+          
+        Plotly.newPlot('pie', data, layout);
+
+    });
+
+}
+
+function buildBarChart(){
+    d3.json("http://127.0.0.1:5500/beer_api").then((data)=>{
+        //filtering by ID 
+        let breweryT = ['Taproom','Planning','Micro','Brewpub','Regional','Large','Contract','Proprietor'];
+        let taproom = data.filter(membershipS =>membershipS.company_type == breweryT[0]).length; 
+        let planning = data.filter(membershipS =>membershipS.company_type == breweryT[1]).length; 
+        let micro = data.filter(membershipS =>membershipS.company_type == breweryT[2]).length; 
+        let brewpub = data.filter(membershipS =>membershipS.company_type == breweryT[3]).length; 
+        let Regional = data.filter(membershipS =>membershipS.company_type == breweryT[4]).length;
+        let Large = data.filter(membershipS =>membershipS.company_type == breweryT[5]).length;
+        let contract = data.filter(membershipS =>membershipS.company_type == breweryT[6]).length;
+        let prop = data.filter(membershipS =>membershipS.company_type == breweryT[7]).length; 
+
+        let barChart = {
+            y: [taproom,planning,micro,brewpub,Regional,Large,contract,prop],
+            x: breweryT, 
+            text: ['Taproom','Planning','Microbrewery','Brewpub','Regional','Large','Contract','Proprietor'], 
+            type: "bar", 
+        }; 
+
+        let layout = {
+            title: "Different Brewery Types"
+        }
+
+        Plotly.newPlot("bar", [barChart], layout); 
+
+    });
+};
 
 //function that initialize in the dashboard 
 function initialize()
@@ -137,22 +203,18 @@ function initialize()
 
         // for metadata 
         breweryInfo(first_brewery); 
-        //buildBarChart(first_sample); 
+        radioFilter("option1");
+        buildBarChart();
         //buildBubChart(first_sample); 
-
+        buildPieChart()
     });
 };
 
 //function that updates the dashboard 
 function optionChanged(item)
 {
-    //call demoInfo function to change the item 
+    //call breweryInfo function to change the item 
     breweryInfo(item);  
-    //call bar chart 
-    //buildBarChart(item); 
-    //call bubble chart 
-    //buildBubChart(item); 
-
 }
 
 //call the initialize function 
