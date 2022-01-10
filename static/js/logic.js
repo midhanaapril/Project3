@@ -135,7 +135,7 @@ function radioFilter(selection){
 
         var data = [{
             values: array2,
-            labels: ['No Membership', 'Beear Association Member', 'Beear Association "Associate" Member'],
+            labels: ['No Membership', 'Beer Association Member', 'Beer Association "Associate" Member'],
             type: 'pie'
           }];
           
