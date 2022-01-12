@@ -16,32 +16,12 @@ client = mongo.MongoClient(conn)
 db = client.beer_data
 brewery = db.brewery
 
-#mongo = PyMongo(app, uri="mongodb://localhost:27017/beer_data")
 
-
-
-
-# Route to render index.html template using data from Mongo
+# Route to render index.html template
 @app.route("/")
 def home():
-
-    # Find one record of data from the mongo database
-    #beer_data = mongo.db.collection.find_one()
-
-    # Return template and data
-    #return render_template("index.html" , beer = beer_data)
     return render_template("index.html")
 
-
-# Route that will trigger the DB loading function
-# @app.route("/dataload")
-# def initData():
-
-#     # load scraped data into pyMongo
-#     data_initialization.loadData()  
-
-#     # Redirect back to home page
-#     return redirect("/")
 
 # API call to get all data 
 @app.route("/beer_api", methods=['GET', 'POST'])
@@ -49,6 +29,8 @@ def beer_api():
     data = dumps(list(brewery.find()))
     return data
 
+
+#API to get specific brewery based on brewery name
 @app.route("/beer_api/<indv_brewery>", methods=['GET', 'POST'])
 def one_brewery(indv_brewery):
     """Fetch the brewery information that matches the name 
@@ -62,20 +44,23 @@ def one_brewery(indv_brewery):
         print("no I ran")
         return jsonify({"error": f"{indv_brewery} not found."}), 404
 
+#API to get list of brewery information based on membership
 @app.route("/beer_api/member/<membership>", methods=['GET','POST'])
 def membership_status(membership): 
     data = db.brewery.find({'member_type':membership})
     return dumps(list(data))
 
+#API to get a list of just the brewery names 
 @app.route("/beer_api/brewery_names", methods=['GET','POST'])
 def brewery_list(): 
     data = brewery.distinct('company_name')
     return jsonify(data)
 
+#API to get brewery information based on brewery types 
 @app.route("/beer_api/type/<brewery_type>", methods=['GET','POST'])
 def brewerType(brewery_type): 
     data = db.brewery.find({'company_type':brewery_type})
     return dumps(list(data))
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5500)
+    app.run(debug=True, port=5500) #restrict port to 5500 which is same as the live server for JS 

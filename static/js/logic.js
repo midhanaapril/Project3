@@ -37,8 +37,8 @@ let basemaps = {
 
 // map object 
 var myMap = L.map("map", {
-    center: [36.7783, -119.4179], 
-    zoom: 3, 
+    center: [32.6620, -83.4376], 
+    zoom: 7, 
     layers: [defaultMap, grayscale, watercolor,topo]
 }); 
 
@@ -100,22 +100,52 @@ function breweryInfo(sample)
 }
 
 function radioFilter(selection){
-    let membership = selection;
-    if (selection == "option2") {
-        //option 2 = Associate Members Only
-        membership = "/Beer Association Associate Member "
-    } else if(selection == "option3"){
-        //option 3 = Beer Association member 
-        membership = "/Beer Association Member"
-    }else if (selection == "option4"){
-        membership = "/No Membership"
+    d3.select("#definition").html("");
+    let btype = selection;
+    let tDef = ""; 
+    if (selection == "brewpub") {
+        btype = "Brewpub";
+        tDef =  "A brewpub is like a taproom in the fact that it is an extension of the " +
+            "brewery itself however food and other activities are incorporated in many instances." +
+            "The brewpub seeks to showcase the brewery’s method of brewing as well as the " +
+            "skills required to produce a quality product."
+    } else if(selection == "micro"){
+        btype = "Microbrewery";
+        tDef = "A microbrewery is a brewery that produces less than 15,000 " +
+            "barrels of beer each year.  A common misconception is that all microbreweries " +
+            "produce craft beer. This is false. The only measure to define a brewery as a " +
+            "microbrewery is the volume of beer they produce";
+    }else if (selection == "regional"){
+        btype = "Regional Brewery";
+        tDef = "A regional brewery is defined by the volume of beer that " +
+            "is produced. To be classified as a regional brewery, the brewery must produce " +
+            "between 15,000 and 6,000,000 barrels of beer a year."
+    }else if (selection == "taproom"){
+        btype = "Taproom";
+        tDef = "A taproom is an extension of a brewery. This set up is used to bring beer" + 
+            "directly to their customers without having to have a line of distribution. " +
+            "The focus of a taproom is the beer itself so there are rarely any food services offered at all.";
+    }else if (selection == "contract"){
+        btype = "Contract Brewery";
+        tDef = "A contract brewery is a brewery for hire. These breweries" +
+            "contract with other brands to produce and package their products. The contract " +
+            "brewery follows all direction given by their client. "
+    }else if (selection == "prop"){
+        btype = "Proprietor Brewery";
+        tDef = "This type of brewery rents out excess space and " +
+            "equipment to other brewers to produce their beer. These breweries foster beer " +
+            "development by allowing small brewers to gain access to the industry without as " +
+            "many entry costs. "
+    }else if (selection == "large"){
+        btype = "Large Brewery";
+        tDef = "A large brewery is defined by the volume of beer that is " +
+            "produced. To be classified as a regional brewery, the brewery must produce over " +
+            "6,000,000 barrels of beer a year."
     };
- 	d3.json('http://127.0.0.1:5500/beer_api'+membership).then(function(data) {
- 		console.log(selection);
-        if (selection == "option2") {
-            //option 2 = Associate Members Only
-        };
- 	}); 
+    
+    d3.select("#definition")
+        .append("h5").style("font-weight",700).text(btype+ " ")
+        .append("tspan").style("font-weight", 300).text(tDef); 
 }; 
 
 
@@ -154,21 +184,21 @@ function radioFilter(selection){
 function buildBarChart(){
     d3.json("http://127.0.0.1:5500/beer_api").then((data)=>{
         //filtering by type 
-        let breweryT = ['Taproom','Planning','Micro','Brewpub','Regional','Large','Contract','Proprietor'];
+        let breweryT = ['Taproom','Brewpub','Micro','Regional','Contract','Large','Proprietor'];
         let taproom = data.filter(membershipS =>membershipS.company_type == breweryT[0]).length; 
-        let planning = data.filter(membershipS =>membershipS.company_type == breweryT[1]).length; 
+        let brewpub = data.filter(membershipS =>membershipS.company_type == breweryT[1]).length; 
         let micro = data.filter(membershipS =>membershipS.company_type == breweryT[2]).length; 
-        let brewpub = data.filter(membershipS =>membershipS.company_type == breweryT[3]).length; 
-        let Regional = data.filter(membershipS =>membershipS.company_type == breweryT[4]).length;
+        let Regional = data.filter(membershipS =>membershipS.company_type == breweryT[3]).length;
+        let contract = data.filter(membershipS =>membershipS.company_type == breweryT[4]).length;
         let Large = data.filter(membershipS =>membershipS.company_type == breweryT[5]).length;
-        let contract = data.filter(membershipS =>membershipS.company_type == breweryT[6]).length;
-        let prop = data.filter(membershipS =>membershipS.company_type == breweryT[7]).length; 
+        let prop = data.filter(membershipS =>membershipS.company_type == breweryT[6]).length; 
 
         let barChart = {
-            y: [taproom,planning,micro,brewpub,Regional,Large,contract,prop],
+            y: [taproom,brewpub,micro,Regional,contract,Large,prop],
             x: breweryT, 
-            text: ['Taproom','Planning','Microbrewery','Brewpub','Regional','Large','Contract','Proprietor'], 
+            text: ['Taproom', 'Brewpub','Microbrewery','Regional','Contract','Large','Proprietor'], 
             type: "bar", 
+            oreintation: "h"
         }; 
 
         let layout = {
@@ -203,7 +233,7 @@ function initialize()
 
         // 
         breweryInfo(first_brewery); 
-        radioFilter("option1");
+        radioFilter("taproom");
         buildBarChart();
         buildPieChart()
     });
