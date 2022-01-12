@@ -62,8 +62,9 @@ def one_brewery(indv_brewery):
         print("no I ran")
         return jsonify({"error": f"{indv_brewery} not found."}), 404
 
-@app.route("/beer_api/<membership>", methods=['GET','POST'])
+@app.route("/beer_api/member/<membership>", methods=['GET','POST'])
 def membership_status(membership): 
+    print("I Ran")
     data = db.brewery.find({'member_type':membership})
     return dumps(list(data))
 
@@ -72,12 +73,6 @@ def brewery_list():
     data = brewery.distinct('company_name')
     return jsonify(data)
 
-# @app.route('/get-json', methods=['GET', 'POST'])
-# def get_json():
-#     ''' Send JSON data to Javascript '''
-#     # Import Data
-#     data = dumps(list(brewery.find()))
-#     return jsonify(data)
 
 
 if __name__ == "__main__":

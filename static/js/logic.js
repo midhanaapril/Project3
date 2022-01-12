@@ -121,7 +121,7 @@ function radioFilter(selection){
 
  function buildPieChart(){
      d3.json("http://127.0.0.1:5500/beer_api").then((data)=>{
-        //filtering by ID 
+        //filtering by membership 
         let not_member = data.filter(membershipS =>membershipS.member_type == "No Membership").length; 
         let BAmember = data.filter(membershipS =>membershipS.member_type == "Beer Association Member").length; 
         let BAAmember = data.filter(membershipS =>membershipS.member_type == "Beer Association Associate Member").length; 
@@ -153,7 +153,7 @@ function radioFilter(selection){
 
 function buildBarChart(){
     d3.json("http://127.0.0.1:5500/beer_api").then((data)=>{
-        //filtering by ID 
+        //filtering by type 
         let breweryT = ['Taproom','Planning','Micro','Brewpub','Regional','Large','Contract','Proprietor'];
         let taproom = data.filter(membershipS =>membershipS.company_type == breweryT[0]).length; 
         let planning = data.filter(membershipS =>membershipS.company_type == breweryT[1]).length; 
@@ -201,11 +201,10 @@ function initialize()
         let first_brewery = brewery_names[0];
         //console.log(first_brewery)
 
-        // for metadata 
+        // 
         breweryInfo(first_brewery); 
         radioFilter("option1");
         buildBarChart();
-        //buildBubChart(first_sample); 
         buildPieChart()
     });
 };
