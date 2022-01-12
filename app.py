@@ -64,7 +64,6 @@ def one_brewery(indv_brewery):
 
 @app.route("/beer_api/member/<membership>", methods=['GET','POST'])
 def membership_status(membership): 
-    print("I Ran")
     data = db.brewery.find({'member_type':membership})
     return dumps(list(data))
 
@@ -73,7 +72,10 @@ def brewery_list():
     data = brewery.distinct('company_name')
     return jsonify(data)
 
-
+@app.route("/beer_api/type/<brewery_type>", methods=['GET','POST'])
+def brewerType(brewery_type): 
+    data = db.brewery.find({'company_type':brewery_type})
+    return dumps(list(data))
 
 if __name__ == "__main__":
     app.run(debug=True, port=5500)
