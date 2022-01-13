@@ -1,56 +1,67 @@
-//tile layers for the backgrounds of the map 
+// Create the tile layer that will be the background of our map.
 var defaultMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	maxZoom: 19,
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
-//grayscale 
-var grayscale =  L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
-	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	subdomains: 'abcd',
-	minZoom: 0,
-	maxZoom: 20,
-	ext: 'png'
-});
-
-//watercolor 
-var watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	subdomains: 'abcd',
-	minZoom: 1,
-	maxZoom: 16,
-	ext: 'jpg'
-});
-
-//topography 
-var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-	maxZoom: 17,
-	attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-});
-
-let basemaps = {
-    "Gray Scale": grayscale,
-    "Water Color": watercolor,
-    Topography: topo,
-    Default: defaultMap
-}; 
+var layers = {
+    tapRoomL: new L.LayerGroup(),
+    largeL: new L.LayerGroup(),
+    contractL: new L.LayerGroup(),
+    propL: new L.LayerGroup(),
+    brewpubL: new L.LayerGroup(),
+    microL: new L.LayerGroup(),
+    regionaL: new L.LayerGroup()
+};
+  
 
 // map object 
 var myMap = L.map("map", {
     center: [32.6620, -83.4376], 
     zoom: 7, 
-    layers: [defaultMap, grayscale, watercolor,topo]
+    layers: [
+        layers.tapRoomL,
+        layers.largeL,
+        layers.brewpubL,
+        layers.propL,
+        layers.contractL,
+        layers.regionaL,
+        layers.microL
+    ]
 }); 
 
 defaultMap.addTo(myMap); 
 
+var overlays = {
+    "Taproom":layers.tapRoomL,
+    "Large Brewery":layers.largeL,
+    "Brewpub":layers.brewpubL,
+    "Proprietary":layers.propL,
+    "Contract Brewery":layers.contractL,
+    "Regional Brewery":layers.regionaL,
+    "Micro Brewery":layers.microL
+};
+  
+// Create a control for our layers, and add our overlays to it.
+L.control.layers(null, overlays).addTo(myMap);
 
-const all_breweries  = 'http://127.0.0.1:5500/beer_api'
-
-d3.json(all_breweries).then(function(data) {
-    //console.log(data);
-    console.log(data)
+// Initialize an object that contains icons for each layer group.
+var tapI = L.icon({
+    iconUrl: 'beerIcon_tap.png',
+    iconSize: [38,38]
 });
+
+// var newMarker = L.marker([32.6620, -83.4376], {
+//     icon: icons[tapRoomL]
+// });
+
+L.marker([32.6620, -83.4376], {icon: tapI}).addTo(layers[tapRoomL]);
+
+// const all_breweries  = 'http://127.0.0.1:5500/beer_api'
+
+// d3.json(all_breweries).then(function(data) {
+//     //console.log(data);
+//     console.log(data)
+// });
 
 
 function breweryInfo(sample)
@@ -160,7 +171,7 @@ function radioFilter(selection){
         let array = [not_member, BAmember , BAAmember];
         let array2 = [];
         for(var i = 0, length = array.length; i < length; i++){
-            array2[i] = (array[i]/total_count)*100;
+            array2[i] = Math.round((array[i]/total_count)*100);
         }
 
         var data = [{
