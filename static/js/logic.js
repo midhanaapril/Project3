@@ -3,54 +3,127 @@ var defaultMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
-// var layers = {
-//     tapRoomL: new L.LayerGroup(),
-//     largeL: new L.LayerGroup(),
-//     contractL: new L.LayerGroup(),
-//     propL: new L.LayerGroup(),
-//     brewpubL: new L.LayerGroup(),
-//     microL: new L.LayerGroup(),
-//     regionaL: new L.LayerGroup()
-// };
+var layers = {
+    tapRoomL: new L.LayerGroup(),
+    largeL: new L.LayerGroup(),
+    contractL: new L.LayerGroup(),
+    propL: new L.LayerGroup(),
+    brewpubL: new L.LayerGroup(),
+    microL: new L.LayerGroup(),
+    regionaL: new L.LayerGroup()
+};
   
 
 // map object 
 var myMap = L.map("map", {
     center: [32.6620, -83.4376], 
-    zoom: 7 
-    // layers: [
-    //     layers.tapRoomL,
-    //     layers.largeL,
-    //     layers.brewpubL,
-    //     layers.propL,
-    //     layers.contractL,
-    //     layers.regionaL,
-    //     layers.microL
-    // ]
+    zoom: 7, 
+    layers: [
+        layers.tapRoomL,
+        layers.largeL,
+        layers.brewpubL,
+        layers.propL,
+        layers.contractL,
+        layers.regionaL,
+        layers.microL
+    ]
 }); 
 
 defaultMap.addTo(myMap); 
 
-d3.json('http://127.0.0.1:5500/beer_api').then((data)=>{
-    for (var i = 0; i < data.length; i++) {
-        var marker = L.marker([data[i].latitude, data[i].longitude],{title:data[i].company_name}).bindPopup(`<h3>${data[i].company_name}</h3> <hr> <h4>Type: ${data[i].company_type}</h4>`).addTo(myMap);
-    };
-});
 
-// var overlays = {
-//     "Taproom":layers.tapRoomL,
-//     "Large Brewery":layers.largeL,
-//     "Brewpub":layers.brewpubL,
-//     "Proprietary":layers.propL,
-//     "Contract Brewery":layers.contractL,
-//     "Regional Brewery":layers.regionaL,
-//     "Micro Brewery":layers.microL
-// };
+
+var overlays = {
+    "Taproom":layers.tapRoomL,
+    "Large Brewery":layers.largeL,
+    "Brewpub":layers.brewpubL,
+    "Proprietary":layers.propL,
+    "Contract Brewery":layers.contractL,
+    "Regional Brewery":layers.regionaL,
+    "Micro Brewery":layers.microL
+};
   
 // Create a control for our layers, and add our overlays to it.
-//L.control.layers(null, overlays).addTo(myMap);
+L.control.layers(null, overlays).addTo(myMap);
 
+var icons = {
+    tapRoomL: L.ExtraMarkers.icon({
+        icon: "ion-beer",
+        iconColor: "white",
+        markerColor: "red",
+        shape: "circle"
+    }),
+    largeL: L.ExtraMarkers.icon({
+        icon: "ion-beer",
+        iconColor: "white",
+        markerColor: "orange",
+        shape: "circle"
+    }),
+    brewpubL: L.ExtraMarkers.icon({
+        icon: "ion-beer",
+        iconColor: "white",
+        markerColor: "yellow",
+        shape: "circle"
+    }),
+    propL: L.ExtraMarkers.icon({
+        icon: "ion-beer",
+        iconColor: "white",
+        markerColor: "blue",
+        shape: "circle"
+    }),
+    contractL: L.ExtraMarkers.icon({
+        icon: "ion-beer",
+        iconColor: "white",
+        markerColor: "green",
+        shape: "circle"
+    }),
+    regionaL: L.ExtraMarkers.icon({
+        icon: "ion-beer",
+        iconColor: "black",
+        markerColor: "white",
+        shape: "circle"
+    }),
+    microL: L.ExtraMarkers.icon({
+        icon: "ion-beer",
+        iconColor: "white",
+        markerColor: "purple",
+        shape: "circle"
+    })
+  };
 
+d3.json('http://127.0.0.1:5500/beer_api').then((data)=>{
+    for (var i = 0; i < data.length; i++) {
+        //var marker = L.marker([data[i].latitude, data[i].longitude],{title:data[i].company_name}).bindPopup(`<h3>${data[i].company_name}</h3> <hr> <h4>Type: ${data[i].company_type}</h4>`).addTo(myMap);
+        var btype = ""; 
+        console.log(data[i])
+        console.log(data[i].company_type);
+        console.log(data[i].latitude);
+        if (data[i].company_type == "Taproom"){
+            btype = "tapRoomL";
+        } else if (data[i].company_type == "Brewpub") {
+            btype = "brewpubL";
+        } else if (data[i].company_type == "Large") {
+            btype = "largeL";
+        }else if (data[i].company_type == "Contract") {
+            btype = "contractL";
+        }else if (data[i].company_type == "Micro") {
+            btype = "microL";
+        }else if (data[i].company_type == "Proprietor") {
+            btype = "propL";
+        }else if (data[i].company_type == "Regional") {
+            btype = "regionaL";
+        };
+        var newMarker = L.marker([data[i].latitude, data[i].longitude], {
+            icon: icons[btype],
+            title: data[i].company_name
+        }).bindPopup(`Company Name: <b>${data[i].company_name}</b> <br>
+                    Phone: <b>${data[i].company_phone}</b> <br>
+                    Type: <b>${data[i].company_type}<b>`);
+        newMarker.addTo(layers[btype]);
+    };
+    
+    
+});
 
 // const all_breweries  = 'http://127.0.0.1:5500/beer_api'
 
@@ -60,7 +133,7 @@ d3.json('http://127.0.0.1:5500/beer_api').then((data)=>{
 // });
 
 function zoomOut(){
-    myMap.setView([32.6620, -83.4376],7);
+    myMap.setView([32.6620, -83.4376],6);
 };
 
 function breweryInfo(sample)
@@ -68,8 +141,6 @@ function breweryInfo(sample)
     //console.log(sample);
     d3.json('http://127.0.0.1:5500/beer_api/'+sample).then((data)=>{
         let breweryEntry = data;
-        console.log(breweryEntry)
-        console.log(breweryEntry[0])
         
         //clearing data for "fresh display"
         d3.select("#sample-metadata").html("");
