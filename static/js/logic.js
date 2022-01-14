@@ -3,58 +3,54 @@ var defaultMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
-var layers = {
-    tapRoomL: new L.LayerGroup(),
-    largeL: new L.LayerGroup(),
-    contractL: new L.LayerGroup(),
-    propL: new L.LayerGroup(),
-    brewpubL: new L.LayerGroup(),
-    microL: new L.LayerGroup(),
-    regionaL: new L.LayerGroup()
-};
+// var layers = {
+//     tapRoomL: new L.LayerGroup(),
+//     largeL: new L.LayerGroup(),
+//     contractL: new L.LayerGroup(),
+//     propL: new L.LayerGroup(),
+//     brewpubL: new L.LayerGroup(),
+//     microL: new L.LayerGroup(),
+//     regionaL: new L.LayerGroup()
+// };
   
 
 // map object 
 var myMap = L.map("map", {
     center: [32.6620, -83.4376], 
-    zoom: 7, 
-    layers: [
-        layers.tapRoomL,
-        layers.largeL,
-        layers.brewpubL,
-        layers.propL,
-        layers.contractL,
-        layers.regionaL,
-        layers.microL
-    ]
+    zoom: 7 
+    // layers: [
+    //     layers.tapRoomL,
+    //     layers.largeL,
+    //     layers.brewpubL,
+    //     layers.propL,
+    //     layers.contractL,
+    //     layers.regionaL,
+    //     layers.microL
+    // ]
 }); 
 
 defaultMap.addTo(myMap); 
 
-var overlays = {
-    "Taproom":layers.tapRoomL,
-    "Large Brewery":layers.largeL,
-    "Brewpub":layers.brewpubL,
-    "Proprietary":layers.propL,
-    "Contract Brewery":layers.contractL,
-    "Regional Brewery":layers.regionaL,
-    "Micro Brewery":layers.microL
-};
-  
-// Create a control for our layers, and add our overlays to it.
-L.control.layers(null, overlays).addTo(myMap);
-
-// Initialize an object that contains icons for each layer group.
-var tapI = L.icon({
-    iconUrl: 'beerIcon_tap.png',
-    iconSize: [38,38]
+d3.json('http://127.0.0.1:5500/beer_api').then((data)=>{
+    for (var i = 0; i < data.length; i++) {
+        var marker = L.marker([data[i].latitude, data[i].longitude],{title:data[i].company_name}).bindPopup(`<h3>${data[i].company_name}</h3> <hr> <h4>Type: ${data[i].company_type}</h4>`).addTo(myMap);
+    };
 });
 
-// var newMarker = L.marker([32.6620, -83.4376], {
-//     icon: icons[tapRoomL]
-// });
+// var overlays = {
+//     "Taproom":layers.tapRoomL,
+//     "Large Brewery":layers.largeL,
+//     "Brewpub":layers.brewpubL,
+//     "Proprietary":layers.propL,
+//     "Contract Brewery":layers.contractL,
+//     "Regional Brewery":layers.regionaL,
+//     "Micro Brewery":layers.microL
+// };
+  
+// Create a control for our layers, and add our overlays to it.
+//L.control.layers(null, overlays).addTo(myMap);
 
-L.marker([32.6620, -83.4376], {icon: tapI}).addTo(layers[tapRoomL]);
+
 
 // const all_breweries  = 'http://127.0.0.1:5500/beer_api'
 
@@ -63,6 +59,9 @@ L.marker([32.6620, -83.4376], {icon: tapI}).addTo(layers[tapRoomL]);
 //     console.log(data)
 // });
 
+function zoomOut(){
+    myMap.setView([32.6620, -83.4376],7);
+};
 
 function breweryInfo(sample)
 {
@@ -94,10 +93,12 @@ function breweryInfo(sample)
                 key = "Membership Status: ";
             } else if ( key == "independent_craft"){
                 key = "Independent Craft Brewery: "; 
-            }else if ( key == "latitude: "){
+            }else if ( key == "latitude"){
                 key = "Latitude: ";
+                value = value.toFixed(4);
             }else if ( key == "longitude"){
-                key = "Longitude: "
+                key = "Longitude: ";
+                value = value.toFixed(4);
             }else if ( key == "address"){
                 key = ""; 
                 value = "";
@@ -107,6 +108,7 @@ function breweryInfo(sample)
                 .append("h5").style("font-weight",700).text(`${key}`)
                 .append("tspan").style("font-weight", 300).text(`${value}`); 
         });
+        myMap.setView([breweryEntry[0].latitude, breweryEntry[0].longitude],12);
     });
 }
 
@@ -246,7 +248,7 @@ function initialize()
         breweryInfo(first_brewery); 
         radioFilter("taproom");
         buildBarChart();
-        buildPieChart()
+        buildPieChart();
     });
 };
 
