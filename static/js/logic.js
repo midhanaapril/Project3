@@ -46,6 +46,31 @@ var overlays = {
 // Create a control for our layers, and add our overlays to it.
 L.control.layers(null, overlays).addTo(myMap);
 
+//legend 
+var legend = L.control({
+    position: "bottomright"
+}); 
+
+legend.onAdd = function() {
+    //div for th legend to appear 
+    let div = L.DomUtil.create("div", "info legend"); 
+
+    let breweryT = ['Taproom', 'Brewpub','Micro Brwery','Large Brewery','Contract Brewery', 'Proprietary Brewery','Regional Brewery'];
+    let colors = ["red", "yellow", "purple", "orange", "green","blue", "white"]; 
+
+    //loop through types & colors 
+    for (var i = 0; i < breweryT.length; i++) {
+        div.innerHTML += "<i style='background: "
+            +colors[i]
+            +"'></i>"
+            + breweryT[i]+"<br>"; 
+    }
+
+    return div; 
+}; 
+
+legend.addTo(myMap);
+
 var icons = {
     tapRoomL: L.ExtraMarkers.icon({
         icon: "ion-beer",
@@ -124,6 +149,8 @@ d3.json('http://127.0.0.1:5500/beer_api').then((data)=>{
     
     
 });
+
+
 
 // const all_breweries  = 'http://127.0.0.1:5500/beer_api'
 

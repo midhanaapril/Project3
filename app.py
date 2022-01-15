@@ -33,16 +33,10 @@ def beer_api():
 #API to get specific brewery based on brewery name
 @app.route("/beer_api/<indv_brewery>", methods=['GET', 'POST'])
 def one_brewery(indv_brewery):
-    """Fetch the brewery information that matches the name 
-       the path variable supplied by the user, or a 404 if not."""
 
-    #query the mongoDB for indv_brewery and return info 
-    try: 
-        data = db.brewery.find({'company_name' : indv_brewery})
-        return dumps(list(data))
-    except: 
-        print("no I ran")
-        return jsonify({"error": f"{indv_brewery} not found."}), 404
+    #query the mongoDB for indv_brewery and return info  
+    data = db.brewery.find({'company_name' : indv_brewery})
+    return dumps(list(data))
 
 #API to get list of brewery information based on membership
 @app.route("/beer_api/member/<membership>", methods=['GET','POST'])
