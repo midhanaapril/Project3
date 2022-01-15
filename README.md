@@ -3,6 +3,7 @@
 Python Flask app - app.py - runs on local port 5500. Make sure live server is running at port 5500. <br> 
 Please clear cache if you don't see certain things displaying correctly. <br>
 Both live server and flask app has to be running. 
+"data_initialization.py" must be run to load data into MongoDB for the API's to work. 
 
 ## DATA
 #### IN THIS FILE YOU WILL FIND ALL OF THE CSV FILES THAT WERE CREATED DURING THE SCRAPING PROCESS + Jupyter Notebook to call Google API to get lat/long data. 
