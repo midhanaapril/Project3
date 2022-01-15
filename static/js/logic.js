@@ -120,9 +120,7 @@ d3.json('http://127.0.0.1:5500/beer_api').then((data)=>{
     for (var i = 0; i < data.length; i++) {
         //var marker = L.marker([data[i].latitude, data[i].longitude],{title:data[i].company_name}).bindPopup(`<h3>${data[i].company_name}</h3> <hr> <h4>Type: ${data[i].company_type}</h4>`).addTo(myMap);
         var btype = ""; 
-        console.log(data[i])
-        console.log(data[i].company_type);
-        console.log(data[i].latitude);
+
         if (data[i].company_type == "Taproom"){
             btype = "tapRoomL";
         } else if (data[i].company_type == "Brewpub") {
@@ -152,20 +150,13 @@ d3.json('http://127.0.0.1:5500/beer_api').then((data)=>{
 
 
 
-// const all_breweries  = 'http://127.0.0.1:5500/beer_api'
-
-// d3.json(all_breweries).then(function(data) {
-//     //console.log(data);
-//     console.log(data)
-// });
-
 function zoomOut(){
     myMap.setView([32.6620, -83.4376],6);
 };
 
 function breweryInfo(sample)
 {
-    //console.log(sample);
+
     d3.json('http://127.0.0.1:5500/beer_api/'+sample).then((data)=>{
         let breweryEntry = data;
         
@@ -330,8 +321,6 @@ function initialize()
     
     d3.json('http://127.0.0.1:5500/beer_api/brewery_names').then((data)=>{
         let brewery_names = data; 
-        //console.log(data); 
-        //console.log(data[0]);
 
         //for each to create objects for each samples 
         brewery_names.forEach((brewery) => {
@@ -340,9 +329,8 @@ function initialize()
                  .property("value", brewery); 
         });
         let first_brewery = brewery_names[0];
-        //console.log(first_brewery)
 
-        // 
+        // initialize functions 
         breweryInfo(first_brewery); 
         radioFilter("taproom");
         buildBarChart();

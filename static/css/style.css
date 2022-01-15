@@ -3,12 +3,52 @@ h1{
     color:black;
 }
 
-.s1{
-    background-image: url('../img/image1.jpg');
-    background-size:cover; 
-}
 
+.s1{
+  background-image: url('../img/GeorgiaBreweriesProject_1.png');
+  background-size:cover; 
+}
 .s2{
+  background-image: url('../img/GeorgiaBreweriesProject_2.png');
+  background-size:cover; 
+}
+.s3{
+  background-image: url('../img/GeorgiaBreweriesProject_3.png');
+  background-size:cover; 
+}
+.s4{
+  background-image: url('../img/GeorgiaBreweriesProject_4.png');
+  background-size:cover; 
+}
+.s5{
+  background-image: url('../img/GeorgiaBreweriesProject_5.png');
+  background-size:cover; 
+}
+.s6{
+  background-image: url('../img/GeorgiaBreweriesProject_6.png');
+  background-size:cover; 
+}
+.s7{
+  background-image: url('../img/GeorgiaBreweriesProject_7.png');
+  background-size:cover; 
+}
+.s8{
+  background-image: url('../img/GeorgiaBreweriesProject_8.png');
+  background-size:cover; 
+}
+.s9{
+  background-image: url('../img/GeorgiaBreweriesProject_9.png');
+  background-size:cover; 
+}
+.s10{
+  background-image: url('../img/GeorgiaBreweriesProject_10.png');
+  background-size:cover; 
+}
+.s11{
+  background-image: url('../img/GeorgiaBreweriesProject_11.png');
+  background-size:cover; 
+}
+.s12{
   background-color: orange;
   background-size:cover; 
 }
