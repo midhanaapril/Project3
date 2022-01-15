@@ -1,0 +1,102 @@
+h1{
+    text-align: left;
+    color:black;
+}
+
+
+.s1{
+  background-image: url('../img/GeorgiaBreweriesProject_1.png');
+  background-size:cover; 
+}
+
+.s2{
+  background-image: url('../img/GeorgiaBreweriesProject_2.png');
+  background-size:cover; 
+}
+
+.s3{
+  background-image: url('../img/GeorgiaBreweriesProject_3.png');
+  background-size:cover; 
+}
+
+.s4{
+  background-image: url('../img/GeorgiaBreweriesProject_4.png');
+  background-size:cover; 
+}
+
+.s5{
+  background-image: url('../img/GeorgiaBreweriesProject_5.png');
+  background-size:cover; 
+}
+
+.s6{
+  background-image: url('../img/GeorgiaBreweriesProject_6.png');
+  background-size:cover; 
+}
+
+.s7{
+  background-image: url('../img/GeorgiaBreweriesProject_7.png');
+  background-size:cover; 
+}
+
+.s8{
+  background-image: url('../img/GeorgiaBreweriesProject_8.png');
+  background-size:cover; 
+}
+
+.s9{
+  background-image: url('../img/GeorgiaBreweriesProject_9.png');
+  background-size:cover; 
+}
+
+.s10{
+  background-image: url('../img/GeorgiaBreweriesProject_10.png');
+  background-size:cover; 
+}
+
+.s11{
+  background-image: url('../img/GeorgiaBreweriesProject_11.png');
+  background-size:cover; 
+}
+
+.s12{
+  background-color: orange;
+  background-size:cover; 
+}
+
+
+
+#map {
+  position: relative;
+  border: 1px solid black;
+  border-radius: 8px;
+  height: 100%;  /* or as desired */
+  width: 100%;  /* This means "100% of the width of its container", the .col-md-8 */
+}
+
+.legend {
+  padding: 10px;
+  line-height: 18px;
+  color: #555;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.legend i {
+  float: left;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
+.leaflet-bottom.leaflet-left {
+  width: 90%;
+}
+
+.leaflet-control-container .leaflet-timeline-controls {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  margin-bottom: 15px;
+}
